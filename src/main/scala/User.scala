@@ -5,17 +5,11 @@ sealed trait UserStatus
 case object New extends UserStatus
 case object Deleted extends UserStatus
 
-class User(var name: String,
-           var age: Int,
-           initialStatus: UserStatus = New) {
+case class User(name: String, age: Int, status: UserStatus = New)
 
-  private var _status = initialStatus
-  def status = _status
-
-  def delete(): Unit = {
-    _status = Deleted
-    Mailer.notify(Mailer.userDeletion, this)
+object User {
+  def delete(user: User): User = {
+    Mailer.notify(Mailer.userDeletion, user)
+    user.copy(status = Deleted)
   }
-
-  override def toString = s"User($name, $age, $status)"
 }
