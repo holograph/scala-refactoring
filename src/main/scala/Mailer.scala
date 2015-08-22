@@ -1,13 +1,22 @@
 /**
  * Created by tomerga on 8/23/15.
  */
-class Mailer {
+sealed trait Notification
+case object Creation extends Notification
+case object Deletion extends Notification
+case object Update extends Notification
+
+object Mailer {
   type Body = String
 
-  trait Template[T] { def render(entity: T): Body }
+  trait Template[N <: Notification, T] {
+    def render(entity: T): Mailer.Body
+  }
+}
 
-  val userDeletion = new Template[User] { def render(user: User) = s"Deleted: $user" }
-
-  def notify[T](template: Template[T], entity: T): Unit = println(template render entity)
-
+import Mailer._
+class Mailer {
+  def notify[N <: Notification, T](notification: N, entity: T)
+                                  (implicit template: Template[N, T]): Unit =
+    println(template render entity)
 }
