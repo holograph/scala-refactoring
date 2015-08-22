@@ -1,7 +1,7 @@
 /**
  * Created by tomerga on 8/23/15.
  */
-object Mailer {
+class Mailer {
   type Body = String
 
   trait Template[T] { def render(entity: T): Body }

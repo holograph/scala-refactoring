@@ -7,9 +7,9 @@ case object Deleted extends UserStatus
 
 case class User(name: String, age: Int, status: UserStatus = New)
 
-object User {
-  def delete(user: User): User = {
-    Mailer.notify(Mailer.userDeletion, user)
+class UserManager(mailer: Mailer) {
+  def delete(user: User) = {
+    mailer.notify(mailer.userDeletion, user)
     user.copy(status = Deleted)
   }
 }

@@ -3,5 +3,6 @@
  */
 object ScopingShowcase extends App {
   val user = new User("Jeffrey Lebowski", 47)
-  User.delete(user)
+  val manager = new UserManager(new Mailer)
+  manager.delete(user)
 }
