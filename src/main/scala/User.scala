@@ -7,9 +7,9 @@ case object Deleted extends UserStatus
 
 case class User(name: String, age: Int, status: UserStatus = New)
 
-case object User {
-  implicit val userDeletionTemplate =
-    new Mailer.Template[Deletion.type, User] {
-      def render(user: User): Mailer.Body = s"Deleted: $user"
-    }
+class UserManager(mailer: Mailer) {
+  def delete(user: User) = {
+    mailer.notify(mailer.userDeletion, user)
+    user.copy(status = Deleted)
+  }
 }
